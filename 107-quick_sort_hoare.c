@@ -25,48 +25,59 @@ void swap(int *a, int *b)
 int partition(int *array, int low, int high, size_t size)
 {
 	int pivot = array[high];
-	int x = low - 1, y;
+	int i = low, j = high;
 
-	for (y = low; y <= high; y++)
+	while (1)
 	{
-		if (array[y] <= pivot)
+		while (array[i] < pivot)
+			i++;
+		while (array[j] > pivot)
+			j--;
+
+		if (i < j)
 		{
-			x++;
-			if (x != y)
-			{
-				swap(&array[x], &array[y]);
-				print_array(array, size);
-			}
+			swap(&array[i], &array[j]);
+			print_array(array, size);
+			i++;
+			j--;
+		}
+		else
+		{
+			if (i != j)
+				return (j);
+			return (j - 1);
 		}
 	}
-	return (x);
 }
 /**
- * lomuto_qsort - Sorting Recursively an Array
+ * hoare_qsort - Sorting Recursively an Array
  * @array: Array to be sorted
  * @low: The lowest value of the array
  * @high: highest value of the array
  * @size: Size of The Array
  * Return: void
  */
-void lomuto_qsort(int *array, int low, int high, size_t size)
+void hoare_qsort(int *array, int low, int high, size_t size)
 {
 	int i;
 
 	if (low < high)
 	{
 		i = partition(array, low, high, size);
-		lomuto_qsort(array, low, i - 1, size);
-		lomuto_qsort(array, i + 1, high, size);
+		if (i > low)
+			hoare_qsort(array, low, i, size);
+		hoare_qsort(array, i + 1, high, size);
 	}
 }
 /**
- * quick_sort - Quick Sort Algorithme using lomuto partition
+ * quick_sort_hoare - Quick Sort Algorithme using hoare partition
  * @array: Array to sort
  * @size: Size of The Array
  * Return: Sorted Array (void)
  */
-void quick_sort(int *array, size_t size)
+void quick_sort_hoare(int *array, size_t size)
 {
-	lomuto_qsort(array, 0, size - 1, size);
+	if (array == NULL || size < 2)
+		return;
+	hoare_qsort(array, 0, size - 1, size);
 }

@@ -1,44 +1,56 @@
 #include "sort.h"
 /**
- *insertion_sort_list - function that sort a list
+ * swap - swap 2 element in an list
+ * @head: head of list
+ * @a: node
+ * @b: node
+ */
+void swap(listint_t *a, listint_t *b, listint_t **head)
+{
+	listint_t *aux1 = NULL, *aux2 = NULL;
+
+	if (a == NULL || b == NULL)
+		return;
+	aux1 = a->prev;
+	aux2 = b->next;
+	/* if nodes are adjacent*/
+	if (aux1)
+		aux1->next = b;
+	if (aux2)
+		aux2->prev = a;
+	a->next = aux2;
+	a->prev = b;
+	b->next = a;
+	b->prev = aux1;
+	if (aux1 == NULL)
+		*head = b;
+}
+/**
+ * insertion_sort_list  - insertion_sort_list
+ * @list: doubly liked list
  *
- *@list: head to list
  */
 void insertion_sort_list(listint_t **list)
 {
-	listint_t *insert, *where, *insert_p, *insert_n, *where_p, *aux;
-	const listint_t *print;
-	int i, w = 0;
+	listint_t *head, *prev;
+	int value;
 
-	aux = *list;
-	for (i = 0; aux != NULL; aux = aux->next, i++)
+	if (list == NULL || (*list)->next == NULL || (*list) == NULL)
 	{
-		printf("aux: %i, aux next: %i", aux->n, aux->next->n);
-		where = aux;
-		insert = aux;
-		for (w = i; w > 0 && where->n < insert->n; where = where->prev, w--)
-			{
-				printf("where: %i\n", where->prev->n);
-				if (insert->n < where->n)
-				{
-					printf("where: %i:", where->n);
-					printf("insert: %i:", insert->n);
-					insert_n = insert->next;
-					insert_p = insert->prev;
-					where_p = where->prev;
-					if (insert_n != NULL)
-						insert_n->prev = insert_p;
-					insert_p->next = insert_n;
-					insert->next = where;
-					insert->prev = where_p;
-					if (where_p != NULL)
-						where_p->next = insert;
-					else
-						*list = insert;
-					where->prev = insert;
-					print = *list;
-					print_list(print);
-				}
-			}
+		return;
+	}
+	head = *list;
+	while (head)
+	{
+		prev = head->prev;
+				value = head->n;
+
+		while (prev && prev->n > value)
+		{
+			swap(prev, head, list);
+			print_list(*list);
+			prev = head->prev;
+		}
+		head = head->next;
 	}
 }

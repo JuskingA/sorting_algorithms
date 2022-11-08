@@ -1,29 +1,54 @@
 #include "sort.h"
 
 /**
- * selection_sort - a function that sorts in ascending order by selection
- * @array: array to be sorted
- * @size: number of elements in the array
+ * locate_min - Locatin the min From Current index in the array
+ * @array: The Array to be Searched
+ * @index: Starting Index of The Search
+ * @size: The Size of The Array
+ * Return: (int) index of min if found or
+ * same given index if index is the min
  */
 
+int locate_min(int *array, int index, size_t size)
+{
+	int min, idx_min;
+	int i;
+
+	min = array[index];
+	idx_min = index;
+	for (i = index; i < (int)size; i++)
+	{
+		if (array[i] < min)
+		{
+			min = array[i];
+			idx_min = i;
+		}
+	}
+	if (idx_min == index)
+		return (-1);
+	return (idx_min);
+}
+
+/**
+ * selection_sort - Implementation of selection Sort Algrithme
+ * @array: Array to sort type int *
+ * @size: The Size of The Given Array
+ *
+ * Return: (Void) Sorted Array
+ */
 void selection_sort(int *array, size_t size)
 {
-	int aux;
-	size_t i, j, i_min;
+	int i;
+	int min, tmp;
 
-	for (i = 0; i < size - 1; i++)
+	for (i = 0; i < (int)size; i++)
 	{
-		i_min = i;
-		for (j = i + 1; j < size; j++)
+		min = locate_min(array, i, size);
+		if (min != -1)
 		{
-			if (array[j] < array[i_min])
-				i_min = j;
-		}
-		if (i_min != i)
-		{
-			aux = array[i];
-			array[i] = array[i_min];
-			array[i_min] = aux;
+			tmp = array[i];
+			array[i] = array[min];
+			array[min] = tmp;
 			print_array(array, size);
 		}
 	}
